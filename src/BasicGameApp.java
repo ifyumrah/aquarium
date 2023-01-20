@@ -38,17 +38,21 @@ public class BasicGameApp implements Runnable {
     public JPanel panel;
 
     public BufferStrategy bufferStrategy;
-    public Image astroPic;
+    public Image takoPic;
     public Image monaPic;
+    public Image teddiePic;
+    public Image brocPic;
     public Image background;
 
 
 
     //Declare the objects used in the program
     //These are things that are made up of more than one variable type
-    private Astronaut astro;
-    private Astronaut fox;
+    private Astronaut tako;
+    private Astronaut teddie;
     private Astronaut mona;
+
+    private Astronaut broc;
 
 
     // Main method definition
@@ -69,13 +73,16 @@ public class BasicGameApp implements Runnable {
 
         //variable and objects
         //create (construct) the objects needed for the game and load up
-        astroPic = Toolkit.getDefaultToolkit().getImage("astronaut.png"); //load the picture
-        astro = new Astronaut(10,100, 5, 0);
-        astroPic = Toolkit.getDefaultToolkit().getImage("astronaut.png");
+        takoPic = Toolkit.getDefaultToolkit().getImage("tako.png"); //load the picture
+        tako = new Astronaut(10,100, 5, 0);
+        tako.width = 50; tako.height = 50;
         background = Toolkit.getDefaultToolkit().getImage("field.png");
-        fox = new Astronaut(30,400, 6, 5);
+        teddie = new Astronaut(30,400, 6, 5);
+        teddiePic = Toolkit.getDefaultToolkit().getImage("teddie.png");
         mona = new Astronaut(50,600,3,4);
         monaPic = Toolkit.getDefaultToolkit().getImage("morgana.png");
+        broc = new Astronaut(20,500,5,0);
+        brocPic = Toolkit.getDefaultToolkit().getImage("broc.png");
 
     }// BasicGameApp()
 
@@ -100,40 +107,50 @@ public class BasicGameApp implements Runnable {
 
     public void crash()
     {
-        if(astro.rec.intersects(fox.rec)){
-            System.out.println("crash");
-            astro.dx = -astro.dx;
-            astro.dy = -astro.dy;
-        }
 
-        if(astro.rec.intersects((fox.rec)) && fox.isAlive ==true && astro.isAlive ==true){
-            fox.dx = -fox.dx;
-            fox.dy = -fox.dy;
+        if(broc.rec.intersects((teddie.rec)) && teddie.isAlive ==true && broc.isAlive ==true){
+            teddie.width = 1 + teddie.width;
+            teddie.height = 1 + teddie.height;
+            System.out.println("yum");
         }
-        if(mona.rec.intersects(astro.rec)) {
-//			fox.dx = -fox.dx;
-//			fox.dy = -fox.dy;
+        if(mona.rec.intersects(tako.rec)) {
+//			teddie.dx = -teddie.dx;
+//			teddie.dy = -teddie.dy;
 //			mona.dx = -mona.dx;
 //			mona.dy = -mona.dy;
             mona.width = 1 + mona.width;
             mona.height = 1 + mona.height;
+            System.out.println("gulp");
         }
 
-        if(mona.rec.intersects(fox.rec)){
-            fox.isAlive = false;
+        if(teddie.rec.intersects(mona.rec) && ((teddie.width > mona.width) && teddie.height > mona.height)){
+            teddie.width =  teddie.width - 1;
+            teddie.height =  teddie.height - 1;
+            mona.height = 1 + mona.height;
+            mona.width = 1 + mona.width;
         }
 
+        if(broc.rec.intersects(mona.rec)){
+            mona.width = mona.width - 1;
+            mona.height = mona.height - 1;
+        }
+
+        if(teddie.rec.intersects(tako.rec)){
+            teddie.width = teddie.width - 1;
+            teddie.height = teddie.height - 1;
+    }
     }
 
 
     public void moveThings()
     {
         //calls the move( ) code in the objects
-//		fox.bump();
+//		teddie.bump();
         crash();
-        astro.bounce();
-        fox.bounce();
+        tako.bounce();
+        teddie.bounce();
         mona.bounce();
+        broc.bounce();
 
     }
 
@@ -185,15 +202,18 @@ public class BasicGameApp implements Runnable {
 
         //draw the image of the astronaut
         g.drawImage(background,0,0,WIDTH,HEIGHT,null);
-        g.drawImage(astroPic, astro.xpos, astro.ypos, astro.width, astro.height, null);
-        if (fox.isAlive == true){
-            g.drawImage(astroPic, fox.xpos, fox.ypos, fox.width, fox.height, null);
-            g.draw(new Rectangle(fox.xpos,fox.ypos,fox.height,fox.width));
+        g.drawImage(takoPic, tako.xpos, tako.ypos, tako.width, tako.height, null);
+        if (teddie.isAlive == true){
+            g.drawImage(teddiePic, teddie.xpos, teddie.ypos, teddie.width, teddie.height, null);
+            g.draw(new Rectangle(teddie.xpos,teddie.ypos,teddie.height,teddie.width));
         }
         g.drawImage(monaPic, mona.xpos, mona.ypos, mona.width, mona.height, null );
-        g.draw(new Rectangle(astro.xpos,astro.ypos,astro.height,astro.width));
+        g.draw(new Rectangle(tako.xpos,tako.ypos,tako.height,tako.width));
         g.draw(new Rectangle(mona.xpos,mona.ypos,mona.height,mona.width));
+        g.drawImage(brocPic,broc.xpos,broc.ypos,broc.width,broc.height,null);
+        g.draw(new Rectangle(broc.xpos,broc.ypos,broc.height,broc.width));
         g.dispose();
+
 
         bufferStrategy.show();
     }
