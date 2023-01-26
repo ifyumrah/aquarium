@@ -9,6 +9,8 @@ public class Astronaut { public String name;                //holds the name of 
     public int height;
     public boolean isAlive;//a boolean to denote if the hero is alive or dead.
 
+    public boolean intersect;
+
     public Rectangle rec;
 
 
@@ -28,6 +30,7 @@ public class Astronaut { public String name;                //holds the name of 
         width = 60;
         height = 60;
         isAlive = true;
+        intersect = false;
         rec = new Rectangle(xpos,ypos,height,width);
 
     } // constructor

@@ -17,6 +17,7 @@ import java.awt.image.BufferStrategy;
 import java.awt.*;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.tools.Tool;
 
 
 //*******************************************************************************
@@ -42,6 +43,9 @@ public class BasicGameApp implements Runnable {
     public Image monaPic;
     public Image teddiePic;
     public Image brocPic;
+    public Image smonaPic;
+
+    public Image morgPic;
     public Image background;
 
 
@@ -83,6 +87,8 @@ public class BasicGameApp implements Runnable {
         monaPic = Toolkit.getDefaultToolkit().getImage("morgana.png");
         broc = new Astronaut(20,500,5,0);
         brocPic = Toolkit.getDefaultToolkit().getImage("broc.png");
+        smonaPic = Toolkit.getDefaultToolkit().getImage("smorgana.png");
+        morgPic = Toolkit.getDefaultToolkit().getImage("mona!.png");
 
     }// BasicGameApp()
 
@@ -114,12 +120,9 @@ public class BasicGameApp implements Runnable {
             System.out.println("yum");
         }
         if(mona.rec.intersects(tako.rec)) {
-//			teddie.dx = -teddie.dx;
-//			teddie.dy = -teddie.dy;
-//			mona.dx = -mona.dx;
-//			mona.dy = -mona.dy;
             mona.width = 1 + mona.width;
             mona.height = 1 + mona.height;
+            mona.intersect = false;
             System.out.println("gulp");
         }
 
@@ -128,11 +131,15 @@ public class BasicGameApp implements Runnable {
             teddie.height =  teddie.height - 1;
             mona.height = 1 + mona.height;
             mona.width = 1 + mona.width;
+            mona.intersect = false;
         }
 
-        if(broc.rec.intersects(mona.rec)){
+        if(broc.rec.intersects(mona.rec) || (broc.rec.intersects(mona.rec)) && (mona.width<teddie.width) && mona.height<teddie.height){
             mona.width = mona.width - 1;
             mona.height = mona.height - 1;
+            mona.dx = -mona.dx;
+            mona.dy = -mona.dy;
+            mona.intersect = true;
         }
 
         if(teddie.rec.intersects(tako.rec)){
@@ -212,6 +219,15 @@ public class BasicGameApp implements Runnable {
         g.draw(new Rectangle(mona.xpos,mona.ypos,mona.height,mona.width));
         g.drawImage(brocPic,broc.xpos,broc.ypos,broc.width,broc.height,null);
         g.draw(new Rectangle(broc.xpos,broc.ypos,broc.height,broc.width));
+        if (mona.intersect == true) {
+            g.drawImage(smonaPic, mona.xpos, mona.ypos, mona.width, mona.height, null);
+            g.draw(new Rectangle(mona.xpos, mona.ypos, mona.height, mona.width));
+        }
+        if(teddie.width < mona.width && teddie.height < mona.height){
+            g.drawImage(morgPic,mona.xpos,mona.ypos,mona.width,mona.height,null);
+            g.draw(new Rectangle(mona.xpos, mona.ypos, mona.height, mona.width));
+            mona.intersect = false;
+        }
         g.dispose();
 
 
