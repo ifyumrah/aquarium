@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="df7ff771-c071-445f-a660-e2254dceff5d" name="Changes" comment="teddie is here">
-      <change afterPath="$PROJECT_DIR$/mona!.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/smorgana.png" afterDir="false" />
+    <list default="true" id="df7ff771-c071-445f-a660-e2254dceff5d" name="Changes" comment="mona becomes sentient">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/morgana.png" beforeDir="false" afterPath="$PROJECT_DIR$/morgana.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Astronaut.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Astronaut.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/BasicGameApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/BasicGameApp.java" afterDir="false" />
     </list>
@@ -72,7 +69,14 @@
       <option name="project" value="LOCAL" />
       <updated>1674237946805</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="mona becomes sentient">
+      <created>1674702056302</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1674702056302</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -90,6 +94,7 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="it's the same as 2.0 objects tbh" />
     <MESSAGE value="teddie is here" />
-    <option name="LAST_COMMIT_MESSAGE" value="teddie is here" />
+    <MESSAGE value="mona becomes sentient" />
+    <option name="LAST_COMMIT_MESSAGE" value="mona becomes sentient" />
   </component>
 </project>

@@ -44,10 +44,9 @@ public class BasicGameApp implements Runnable {
     public Image teddiePic;
     public Image brocPic;
     public Image smonaPic;
-
     public Image morgPic;
     public Image background;
-
+    public Image gameOver;
 
 
     //Declare the objects used in the program
@@ -57,6 +56,8 @@ public class BasicGameApp implements Runnable {
     private Astronaut mona;
 
     private Astronaut broc;
+
+    private boolean winning = false;
 
 
     // Main method definition
@@ -78,14 +79,16 @@ public class BasicGameApp implements Runnable {
         //variable and objects
         //create (construct) the objects needed for the game and load up
         takoPic = Toolkit.getDefaultToolkit().getImage("tako.png"); //load the picture
-        tako = new Astronaut(10,100, 5, 0);
-        tako.width = 50; tako.height = 50;
+        tako = new Astronaut(10, 100, 5, 0);
+        tako.width = 50;
+        tako.height = 50;
         background = Toolkit.getDefaultToolkit().getImage("field.png");
-        teddie = new Astronaut(30,400, 6, 5);
+        gameOver = Toolkit.getDefaultToolkit().getImage("finish.jpeg");
+        teddie = new Astronaut(30, 400, 6, 5);
         teddiePic = Toolkit.getDefaultToolkit().getImage("teddie.png");
-        mona = new Astronaut(50,600,3,4);
+        mona = new Astronaut(50, 600, 3, 4);
         monaPic = Toolkit.getDefaultToolkit().getImage("morgana.png");
-        broc = new Astronaut(20,500,5,0);
+        broc = new Astronaut(20, 500, 5, 0);
         brocPic = Toolkit.getDefaultToolkit().getImage("broc.png");
         smonaPic = Toolkit.getDefaultToolkit().getImage("smorgana.png");
         morgPic = Toolkit.getDefaultToolkit().getImage("mona!.png");
@@ -111,50 +114,57 @@ public class BasicGameApp implements Runnable {
         }
     }
 
-    public void crash()
-    {
+    public void crash() {
 
-        if(broc.rec.intersects((teddie.rec)) && teddie.isAlive ==true && broc.isAlive ==true){
+        if (broc.rec.intersects(teddie.rec)){
             teddie.width = 1 + teddie.width;
             teddie.height = 1 + teddie.height;
             System.out.println("yum");
         }
-        if(mona.rec.intersects(tako.rec)) {
+        if (mona.rec.intersects(tako.rec)) {
             mona.width = 1 + mona.width;
             mona.height = 1 + mona.height;
             mona.intersect = false;
             System.out.println("gulp");
         }
 
-        if(teddie.rec.intersects(mona.rec) && ((teddie.width > mona.width) && teddie.height > mona.height)){
-            teddie.width =  teddie.width - 1;
-            teddie.height =  teddie.height - 1;
+        if (teddie.rec.intersects(mona.rec) && ((teddie.width > mona.width) && teddie.height > mona.height)) {
+            teddie.width = teddie.width - 1;
+            teddie.height = teddie.height - 1;
             mona.height = 1 + mona.height;
             mona.width = 1 + mona.width;
             mona.intersect = false;
         }
 
-        if(broc.rec.intersects(mona.rec) || (broc.rec.intersects(mona.rec)) && (mona.width<teddie.width) && mona.height<teddie.height){
+        if (broc.rec.intersects(mona.rec) || (broc.rec.intersects(mona.rec)) && (mona.width < teddie.width) && mona.height < teddie.height && !mona.isCrashing) {
+            mona.isCrashing = true;
             mona.width = mona.width - 1;
             mona.height = mona.height - 1;
-            mona.dx = -mona.dx;
-            mona.dy = -mona.dy;
             mona.intersect = true;
         }
 
-        if(teddie.rec.intersects(tako.rec)){
+        if (broc.rec.intersects(mona.rec)) {
+            mona.isCrashing = false;
+        }
+
+        if (teddie.rec.intersects(tako.rec)) {
             teddie.width = teddie.width - 1;
             teddie.height = teddie.height - 1;
-    }
+        }
+
+        if (mona.rec.intersects(teddie.rec) && mona.width > teddie.width && mona.height > teddie.height) {
+            teddie.isAlive = false;
+            winning=true;
+            System.out.println("Game overrr");
+        }
     }
 
 
-    public void moveThings()
-    {
+    public void moveThings() {
         //calls the move( ) code in the objects
 //		teddie.bump();
         crash();
-        tako.bounce();
+        tako.wrap();
         teddie.bounce();
         mona.bounce();
         broc.bounce();
@@ -162,7 +172,7 @@ public class BasicGameApp implements Runnable {
     }
 
     //Pauses or sleeps the computer for the amount specified in milliseconds
-    public void pause(int time ){
+    public void pause(int time) {
         //sleep
         try {
             Thread.sleep(time);
@@ -204,33 +214,38 @@ public class BasicGameApp implements Runnable {
 
     //paints things on the screen using bufferStrategy
     private void render() {
-        Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
-        g.clearRect(0, 0, WIDTH, HEIGHT);
+            Graphics2D g = (Graphics2D) bufferStrategy.getDrawGraphics();
+            g.clearRect(0, 0, WIDTH, HEIGHT);
 
-        //draw the image of the astronaut
-        g.drawImage(background,0,0,WIDTH,HEIGHT,null);
-        g.drawImage(takoPic, tako.xpos, tako.ypos, tako.width, tako.height, null);
-        if (teddie.isAlive == true){
-            g.drawImage(teddiePic, teddie.xpos, teddie.ypos, teddie.width, teddie.height, null);
-            g.draw(new Rectangle(teddie.xpos,teddie.ypos,teddie.height,teddie.width));
+            //draw the image of the astronaut
+        if (winning) {
+            g.drawImage(gameOver, 0, 0, WIDTH, HEIGHT, null);
         }
-        g.drawImage(monaPic, mona.xpos, mona.ypos, mona.width, mona.height, null );
-        g.draw(new Rectangle(tako.xpos,tako.ypos,tako.height,tako.width));
-        g.draw(new Rectangle(mona.xpos,mona.ypos,mona.height,mona.width));
-        g.drawImage(brocPic,broc.xpos,broc.ypos,broc.width,broc.height,null);
-        g.draw(new Rectangle(broc.xpos,broc.ypos,broc.height,broc.width));
-        if (mona.intersect == true) {
-            g.drawImage(smonaPic, mona.xpos, mona.ypos, mona.width, mona.height, null);
-            g.draw(new Rectangle(mona.xpos, mona.ypos, mona.height, mona.width));
+        else {
+            if (teddie.isAlive = true) {
+                g.drawImage(background, 0, 0, WIDTH, HEIGHT, null);
+                g.drawImage(takoPic, tako.xpos, tako.ypos, tako.width, tako.height, null);
+                g.drawImage(teddiePic, teddie.xpos, teddie.ypos, teddie.width, teddie.height, null);
+                g.draw(new Rectangle(teddie.xpos, teddie.ypos, teddie.height, teddie.width));
+                g.drawImage(monaPic, mona.xpos, mona.ypos, mona.width, mona.height, null);
+                g.draw(new Rectangle(tako.xpos, tako.ypos, tako.height, tako.width));
+                g.draw(new Rectangle(mona.xpos, mona.ypos, mona.height, mona.width));
+                g.drawImage(brocPic, broc.xpos, broc.ypos, broc.width, broc.height, null);
+                g.draw(new Rectangle(broc.xpos, broc.ypos, broc.height, broc.width));
+                if (mona.intersect == true) {
+                    g.drawImage(smonaPic, mona.xpos, mona.ypos, mona.width, mona.height, null);
+                    g.draw(new Rectangle(mona.xpos, mona.ypos, mona.height, mona.width));
+                }
+                if (teddie.width < mona.width && teddie.height < mona.height) {
+                    g.drawImage(morgPic, mona.xpos, mona.ypos, mona.width, mona.height, null);
+                    g.draw(new Rectangle(mona.xpos, mona.ypos, mona.height, mona.width));
+                    mona.intersect = false;
+                    g.dispose();
+                }
+            }
         }
-        if(teddie.width < mona.width && teddie.height < mona.height){
-            g.drawImage(morgPic,mona.xpos,mona.ypos,mona.width,mona.height,null);
-            g.draw(new Rectangle(mona.xpos, mona.ypos, mona.height, mona.width));
-            mona.intersect = false;
-        }
-        g.dispose();
 
-
-        bufferStrategy.show();
+            bufferStrategy.show();
+        }
     }
-}
+
